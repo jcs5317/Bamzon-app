@@ -1,2 +1,2 @@
-# Bamzon-app
+# bamzon-app
 SQL node inquirer 
