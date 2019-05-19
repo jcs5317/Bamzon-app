@@ -1,5 +1,5 @@
 var mysql = require("mysql");
-//var inquirer = require("inquirer");
+var inquirer = require("inquirer");
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -22,7 +22,7 @@ connection.connect(function(err){
     throw err; 
   }
   else{
-      console.log("connected as id" + connection.threadId +"\n=================");
+      console.log("connected as id: " + connection.threadId +"\n=================");
       //runApp function  
       startApp();
   }
@@ -41,3 +41,9 @@ function startApp(){
   });
 // run the start function after the connection is made to prompt the user
 }
+inquirer.prompt([{
+  type: "input",
+  name: "id",
+  message: "What is the id of the product you would like to buy?"
+}
+])
