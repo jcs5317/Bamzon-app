@@ -1,4 +1,4 @@
-# bamzon-app
+# bamazon-app
 - An app that simulates an online store purchase.
 + node SQL and Inquirer modules
 ## How it works
