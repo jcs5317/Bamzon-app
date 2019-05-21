@@ -17,33 +17,118 @@ var connection = mysql.createConnection({
 });
 
 // connect to the mysql server and sql database
-connection.connect(function(err){
-  if(err){
-    throw err; 
+connection.connect(function (err) {
+  if (err) {
+    throw err;
   }
-  else{
-      console.log("connected as id: " + connection.threadId +"\n=================");
-      //runApp function  
-      startApp();
+  else {
+    console.log("connected as id: " + connection.threadId + "\n=================");
+    //runApp function  
+    startApp();
   }
 });
 
 //global variables used across functions 
-var products; //the object to show the user the available items for sale 
-//var product_id;// the id the user chooses
+var saleItems; //the key to show the user the available items for sale 
 
 //get app to run 
-function startApp(){
-
-  connection.query("SELECT * FROM products", function(err,productList_item){
-      products = productList_item;
-      setTimeout(function(){console.table(products);});
+function startApp() {
+  connection.query("SELECT * FROM products", function (err, res) {
+    if(err) throw err;
+    saleItems = res;
+    // show table 
+    console.table("\n");
+    console.table(saleItems);
+    console.table("\n");
+    // wait .5 sec then prompt  
+    setTimeout(function () { promptSale(res)}, 500);
   });
-// run the start function after the connection is made to prompt the user
+  // run the start function after the connection is made to prompt the user
 }
-inquirer.prompt([{
-  type: "input",
-  name: "id",
-  message: "What is the id of the product you would like to buy?"
-}
+
+
+function promptSale(products){
+  inquirer.prompt([
+    {
+      type: "rawlist",
+      name: "id",
+      choices: function(){
+        var optionsIds = []
+        for(var i = 0; i< products.length; i++){
+          optionsIds.push(products[i].item_id)
+        }
+        return optionsIds
+      },
+      message: "What is the id of the product you would like to buy?"
+  },
+  {
+    type: "input",
+    name: "quantity",
+    message: "How many would you like to buy?",
+    //quantity validation
+    validate: function(value){
+      if(isNaN(value)== false){
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 ])
+  .then(function(answer){
+    if(answer.toUpperCase()=="E"){
+      process.exit();
+    }
+    var id = answer.id;
+    var user_quantity =  parseInt(answer.quantity);
+    var stock;
+    var price;
+    var name;
+
+    for(var i = 0; i < products.length; i++){
+      if(products[i].item_id === id) {
+        name = products[i].product_name
+        stock = products[i].stock_quantity;
+        price =  products[i].price;
+        break;
+      }
+    }
+
+    if(user_quantity < stock) {
+      var newStock = stock - user_quantity;
+      connection.query("UPDATE products SET ? where ? ", [{
+          stock_quantity: newStock
+        },
+        {
+          item_id: id
+        }
+      ], function(err, updatedItem){
+        if(err) throw err;
+        if(updatedItem.affectedRows === 1){
+          console.log("\n___________________________")
+            console.log("Bamazon")
+            console.log("-----------------------------")
+            console.log("Item:", name)
+            console.log("Item quantity:", user_quantity)
+            console.log("-----------------------------")
+            console.log("sub-total: $", user_quantity * price)
+            console.log("___________________________")
+            console.log("Thank you for shopping!")
+            console.log("__________________________\n");
+          
+            // promt user buy more or exit 
+            promptSale(products);
+            console.log("Buy another product or press E to exit.")
+            startApp()
+            this.connection.end();
+        }
+      })
+    } else {
+      // not enough stock to buy this item 
+      (user_quantity > stock); {
+        console.log("There is not enough stock available, make another selesction.")
+      }
+      // prompt user to add a different amount or select another product
+    }      
+  })
+}
