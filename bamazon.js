@@ -61,7 +61,7 @@ function promptSale(products) {
         return optionsIds
         },
 
-      message: "Enter product number you would like to buy"
+      message: "Enter item id number you would like to buy"
     },
     {
       type: "input",
@@ -116,7 +116,7 @@ function promptSale(products) {
             console.log("Item:", name)
             console.log("Item quantity:", user_quantity)
             console.log("-----------------------------")
-            console.log("sub-total: $", user_quantity * price)
+            console.log("Total: $", user_quantity * price)
             console.log("___________________________")
             console.log("Thank you for shopping!")
             console.log("___________________________\n");
