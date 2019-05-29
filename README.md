@@ -7,4 +7,4 @@
 - Once bamazon checks to see the if there is quanitity avaiable, calculations are done to show  an order summary and the table stock quantity is updated.
 - User finally is promopt with the choice to continue shopping or stop. 
 ### See demo
-[!Image] https://drive.google.com/file/d/1m2W3lx-fubp5f1tYbx4_HDDhizAcGyuw/view
+![Image] https://drive.google.com/file/d/1m2W3lx-fubp5f1tYbx4_HDDhizAcGyuw/view
