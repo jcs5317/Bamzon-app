@@ -8,4 +8,4 @@ VALUES ("jphone", "electronics", 500, 50),
 ("jcap", "accessories", 18, 10),
 ("jshirt", "clothing", 22, 30),
 ("jsweater", "clothing", 28, 20),
-("jtank", "clothing", 20, 25);
+("jtank", "clothing", 20, 25)
